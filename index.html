@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#000000"/>
+<title>Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --gold:#c9a664;
+  --gold-60:rgba(201,166,100,.60);
+  --gold-30:rgba(201,166,100,.30);
+  --w100:rgba(255,255,255,1);
+  --w90:rgba(255,255,255,.90);
+  --w70:rgba(255,255,255,.70);
+  --w55:rgba(255,255,255,.55);
+  --w45:rgba(255,255,255,.45);
+  --w30:rgba(255,255,255,.30);
+  --w25:rgba(255,255,255,.25);
+  --w15:rgba(255,255,255,.15);
+  --w12:rgba(255,255,255,.12);
+  --w08:rgba(255,255,255,.08);
+  --w06:rgba(255,255,255,.06);
+}
+
+html,body{height:100%;background:#000;color:#fff;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased}
+
+/* ── App shell ── */
+#app{
+  position:fixed;inset:0;height:100dvh;width:100vw;
+  background:#000;overflow:hidden;
+  animation:pgFade .5s ease forwards}
+@keyframes pgFade{from{opacity:0}to{opacity:1}}
+
+#inner{position:relative;margin:0 auto;height:100%;width:100%;max-width:520px}
+
+/* ── Background ── */
+#bg{position:absolute;inset:0}
+#bg-img{width:100%;height:100%;object-fit:cover;object-position:50% 0%;display:block}
+#bg-gradient{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,
+    rgba(0,0,0,.05) 0%,
+    rgba(0,0,0,.35) 38%,
+    rgba(0,0,0,.88) 70%,
+    #000 100%)}
+#bg-lights{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 18% 12%,rgba(255,255,255,.13) 0%,transparent 44%),
+    radial-gradient(circle at 83% 8%, rgba(255,255,255,.07) 0%,transparent 38%)}
+#bg-overlay{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none}
+
+/* ── Scroller ── */
+#scroller{
+  position:relative;height:100%;overflow-y:auto;
+  overscroll-behavior:contain;
+  scrollbar-width:none;-ms-overflow-style:none}
+#scroller::-webkit-scrollbar{display:none}
+
+#spacer{height:56vh}
+
+/* ── Content ── */
+#content{position:relative;padding:0 20px 24px}
+
+/* Name */
+#name{
+  text-align:center;
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-weight:300;
+  font-size:clamp(2.1rem,9vw,3.4rem);
+  letter-spacing:.23em;
+  text-transform:uppercase;
+  line-height:1.1;
+  background:linear-gradient(135deg,#fff 0%,#b4b4b4 52%,#fff 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text}
+
+/* Gold separator */
+#sep{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  margin:13px auto 0;max-width:210px;
+  opacity:0;transform:scaleX(.15);
+  transition:opacity .75s ease .2s,transform .75s cubic-bezier(.22,1,.36,1) .2s}
+#sep.on{opacity:1;transform:scaleX(1)}
+.sline{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent)}
+.sdot{width:4px;height:4px;border-radius:50%;background:var(--gold);flex-shrink:0}
+
+/* Bio */
+#bio{
+  text-align:center;margin:11px auto 0;max-width:390px;
+  font-size:clamp(.84rem,3.4vw,.96rem);
+  line-height:1.72;color:var(--w70);white-space:pre-line}
+
+/* Icons row */
+#icons{
+  display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
+  gap:4px 6px;margin-top:22px}
+.ic{
+  display:flex;align-items:center;justify-content:center;
+  width:50px;height:50px;border-radius:15px;
+  color:var(--w90);text-decoration:none;font-size:1.35rem;
+  transition:color .2s,transform .2s,background .2s;
+  -webkit-tap-highlight-color:transparent}
+.ic:hover,.ic:focus-visible{color:var(--w100);transform:translateY(-2px) scale(1.09);background:var(--w08)}
+.ic:active{transform:scale(.88)}
+
+/* Buttons */
+#buttons{
+  display:flex;align-items:center;justify-content:center;
+  gap:10px;margin-top:20px;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:13px 22px;border-radius:13px;
+  font-size:.875rem;font-weight:600;letter-spacing:.01em;
+  text-decoration:none;cursor:pointer;border:none;outline:none;
+  transition:transform .14s,background .18s,box-shadow .18s;
+  -webkit-tap-highlight-color:transparent;
+  white-space:nowrap;font-family:inherit}
+.btn:active{transform:scale(.94)}
+.btn-call{
+  background:var(--w08);border:1px solid var(--w25);color:var(--w100);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.btn-call:hover{background:var(--w15);border-color:var(--w30)}
+.btn-save{background:var(--w100);color:#000}
+.btn-save:hover{background:rgba(255,255,255,.88);box-shadow:0 4px 22px rgba(255,255,255,.10)}
+.btn-save:disabled{opacity:.6;cursor:not-allowed}
+
+/* Cards */
+#cards{display:flex;flex-direction:column;gap:9px;margin-top:18px}
+.ca{
+  display:flex;align-items:center;gap:13px;
+  padding:12px 15px;border-radius:18px;
+  border:1px solid var(--w12);background:var(--w06);
+  text-decoration:none;color:var(--w100);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  transition:background .18s,border-color .18s,transform .13s;
+  -webkit-tap-highlight-color:transparent}
+.ca:hover{background:var(--w08);border-color:var(--gold-30)}
+.ca:active{transform:scale(.984)}
+.ci{
+  display:flex;align-items:center;justify-content:center;
+  width:44px;height:44px;border-radius:12px;flex-shrink:0;
+  border:1px solid var(--w15);background:var(--w08);
+  transition:background .18s,border-color .18s}
+.ca:hover .ci{background:var(--w15);border-color:var(--gold-60)}
+.ci i{font-size:1.05rem;color:var(--w90)}
+.cb{flex:1;min-width:0}
+.cl{font-size:.875rem;font-weight:600;color:var(--w100);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cs{font-size:.72rem;color:var(--w45);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.car{font-size:.68rem;color:var(--w30);flex-shrink:0}
+
+/* Footer */
+footer{position:relative;text-align:center;padding:14px 16px max(env(safe-area-inset-bottom,0px),28px)}
+footer a{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:.76rem;color:var(--w45);text-decoration:none;
+  transition:color .2s}
+footer a:hover{color:var(--gold)}
+.brand{font-weight:700;color:rgba(201,166,100,.82)}
+footer a:hover .brand{color:var(--gold)}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}}
+</style>
+</head>
+
+<body>
+<div id="app">
+  <div id="inner">
+
+    <div id="bg">
+      <img id="bg-img" alt="Photo de profil"/>
+      <div id="bg-gradient"></div>
+      <div id="bg-lights"></div>
+      <div id="bg-overlay"></div>
+    </div>
+
+    <div id="scroller">
+      <div id="spacer"></div>
+
+      <div id="content">
+        <h1 id="name"></h1>
+        <div id="sep"><div class="sline"></div><div class="sdot"></div><div class="sline"></div></div>
+        <p  id="bio"></p>
+        <div id="icons"></div>
+        <div id="buttons"></div>
+        <div id="cards"></div>
+      </div>
+
+      <footer id="footer"></footer>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   🔧  CONFIGURATION — Remplissez vos informations ici
+   ═══════════════════════════════════════════════════════════════════ */
+
+const CONFIG = {
+
+  /* ── 1. Identité ─────────────────────────────────────────────── */
+  name:   "Votre Nom",              // Votre nom complet affiché
+  bio:    "Designer · Créateur",    // Biographie / slogan court  (laisser "" si vide)
+
+  /* ── 2. Photo de profil ──────────────────────────────────────── */
+  // Collez ici l'URL directe de votre photo (jpg, png, webp…)
+  // Exemple : "https://i.imgur.com/xxxxx.jpg"
+  // Laisser "" pour un avatar généré automatiquement.
+  avatar: "",
+
+  /* ── 3. Téléphones ───────────────────────────────────────────── */
+  phones: [
+    { number: "+213 600 000 000", label: "CELL" },    // Principal  (requis pour le bouton "Appeler")
+ // { number: "+213 700 000 000", label: "WORK" },    // ← Décommenter pour ajouter un 2e numéro
+ // { number: "+213 550 000 000", label: "OTHER" },   // ← Décommenter pour un 3e numéro
+  ],
+
+  /* ── 4. Liens & réseaux sociaux ──────────────────────────────── */
+  //
+  // ↓ Supprimez ou commentez les lignes dont vous n'avez pas besoin ↓
+  //
+  // Types disponibles :
+  //   instagram | facebook  | whatsapp   | tiktok    | linkedin
+  //   telegram  | gmail     | website    | youtube   | twitter
+  //   snapchat  | pinterest | github     | cv        | googlemaps
+  //   googleavis| boutique  | upwork     | owner
+  //
+  links: [
+    { type: "instagram",   url: "https://instagram.com/votre_nom" },
+    { type: "facebook",    url: "https://facebook.com/votre_nom" },
+    { type: "whatsapp",    url: "https://wa.me/213600000000" },     // format : wa.me/INDICATIF+NUMERO
+    { type: "tiktok",      url: "https://tiktok.com/@votre_nom" },
+    { type: "linkedin",    url: "https://linkedin.com/in/votre_nom" },
+    { type: "telegram",    url: "https://t.me/votre_nom" },
+    { type: "gmail",       url: "votre@email.com" },                // email uniquement, pas besoin de mailto:
+    { type: "website",     url: "https://votre-site.com" },
+ // { type: "youtube",     url: "https://youtube.com/@votre_chaine" },
+ // { type: "twitter",     url: "https://x.com/votre_nom" },
+ // { type: "snapchat",    url: "https://snapchat.com/add/votre_nom" },
+ // { type: "github",      url: "https://github.com/votre_nom" },
+ // { type: "cv",          url: "https://lien-vers-votre-cv.com" },
+ // { type: "googlemaps",  url: "https://maps.app.goo.gl/XXXXX" },
+ // { type: "googleavis",  url: "https://g.page/r/XXXXX/review" },
+ // { type: "boutique",    url: "https://votre-boutique.com" },
+ // { type: "upwork",      url: "https://www.upwork.com/fl/votre_nom" },
+  ],
+
+  /* ── 5. Meta ─────────────────────────────────────────────────── */
+  pageTitle:  "Mon Profil",          // Titre affiché dans l'onglet du navigateur
+  poweredBy:  {
+    label: "LAAMSA",
+    url:   "https://www.instagram.com/lamsadz_/"
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════════
+   ↓↓↓  NE PAS MODIFIER LE CODE EN DESSOUS  ↓↓↓
+   ═══════════════════════════════════════════════════════════════════ */
+
+const P = {
+  owner:      { label:"Profil",        fa:"fa-solid fa-link" },
+  cv:         { label:"CV / Résumé",   fa:"fa-solid fa-file-lines" },
+  facebook:   { label:"Facebook",      fa:"fa-brands fa-facebook-f" },
+  instagram:  { label:"Instagram",     fa:"fa-brands fa-instagram" },
+  tiktok:     { label:"TikTok",        fa:"fa-brands fa-tiktok" },
+  whatsapp:   { label:"WhatsApp",      fa:"fa-brands fa-whatsapp" },
+  googleavis: { label:"Google Avis",   fa:"fa-solid fa-star" },
+  googlemaps: { label:"Google Maps",   fa:"fa-solid fa-location-dot" },
+  boutique:   { label:"Boutique",      fa:"fa-solid fa-bag-shopping" },
+  upwork:     { label:"Upwork",        fa:"fa-brands fa-upwork" },
+  gmail:      { label:"Email",         fa:"fa-solid fa-envelope" },
+  email:      { label:"Email",         fa:"fa-solid fa-envelope" },
+  website:    { label:"Site Web",      fa:"fa-solid fa-globe" },
+  linkedin:   { label:"LinkedIn",      fa:"fa-brands fa-linkedin-in" },
+  telegram:   { label:"Telegram",      fa:"fa-brands fa-telegram" },
+  youtube:    { label:"YouTube",       fa:"fa-brands fa-youtube" },
+  twitter:    { label:"X / Twitter",   fa:"fa-brands fa-x-twitter" },
+  snapchat:   { label:"Snapchat",      fa:"fa-brands fa-snapchat" },
+  pinterest:  { label:"Pinterest",     fa:"fa-brands fa-pinterest" },
+  github:     { label:"GitHub",        fa:"fa-brands fa-github" },
+};
+
+const ORDER = [
+  "owner","cv","facebook","instagram","tiktok","whatsapp",
+  "googleavis","googlemaps","boutique","upwork","gmail","email",
+  "website","linkedin","telegram","youtube","twitter",
+  "snapchat","pinterest","github"
+];
+
+const plat   = t => P[t.toLowerCase()] ?? { label:t, fa:"fa-solid fa-link" };
+const isMail = t => ["gmail","email"].includes(t.toLowerCase());
+
+const sorted = [...(CONFIG.links||[])].sort((a,b)=>{
+  const ia=ORDER.indexOf(a.type.toLowerCase()), ib=ORDER.indexOf(b.type.toLowerCase());
+  if(ia>-1&&ib>-1)return ia-ib; return ia>-1?-1:ib>-1?1:0;
+});
+
+const href = l => {
+  const r=l.url.trim();
+  if(isMail(l.type))return `mailto:${r.replace(/^mailto:/i,"")}`;
+  return /^https?:\/\//i.test(r)?r:`https://${r}`;
+};
+
+const subtitle = l => {
+  if(isMail(l.type))return l.url.replace(/^mailto:/i,"");
+  try{
+    const u=new URL(/^https?:\/\//i.test(l.url)?l.url:`https://${l.url}`);
+    return (u.hostname.replace(/^www\./,"")+u.pathname).replace(/\/$/,"");
+  }catch{return l.url;}
+};
+
+const nav = (e,h,mail)=>{ if(!mail){e.preventDefault();window.location.assign(h);} };
+
+/* ── Render ── */
+const avatarUrl = CONFIG.avatar?.trim()
+  || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(CONFIG.name)}`;
+const tel = CONFIG.phones?.[0]?.number;
+
+document.title = CONFIG.pageTitle || CONFIG.name;
+document.getElementById("bg-img").src = avatarUrl;
+document.getElementById("name").textContent = CONFIG.name;
+setTimeout(()=>document.getElementById("sep").classList.add("on"), 160);
+
+const bioEl = document.getElementById("bio");
+CONFIG.bio?.trim() ? (bioEl.textContent=CONFIG.bio) : bioEl.remove();
+
+/* Icons */
+const iconsEl = document.getElementById("icons");
+if(sorted.length){
+  sorted.forEach(l=>{
+    const p=plat(l.type), h=href(l), m=isMail(l.type);
+    const a=document.createElement("a");
+    a.className="ic"; a.href=h;
+    a.setAttribute("aria-label",p.label); a.title=p.label;
+    a.innerHTML=`<i class="${p.fa}" aria-hidden="true"></i>`;
+    a.addEventListener("click",e=>nav(e,h,m));
+    iconsEl.appendChild(a);
+  });
+} else iconsEl.remove();
+
+/* Buttons */
+const btnsEl = document.getElementById("buttons");
+if(tel){
+  const ca=document.createElement("a");
+  ca.className="btn btn-call"; ca.href=`tel:${tel}`;
+  ca.innerHTML=`<i class="fa-solid fa-phone" aria-hidden="true"></i><span>Appeler</span>`;
+  btnsEl.appendChild(ca);
+}
+const saveBtn = document.createElement("button");
+saveBtn.className="btn btn-save"; saveBtn.type="button";
+saveBtn.innerHTML=`<i class="fa-solid fa-download" aria-hidden="true"></i><span>Enregistrer contact</span>`;
+saveBtn.addEventListener("click",saveVCard);
+btnsEl.appendChild(saveBtn);
+
+/* Link cards */
+const cardsEl = document.getElementById("cards");
+if(sorted.length){
+  sorted.forEach(l=>{
+    const p=plat(l.type), h=href(l), m=isMail(l.type), s=subtitle(l);
+    const a=document.createElement("a");
+    a.className="ca"; a.href=h;
+    a.innerHTML=`
+      <div class="ci"><i class="${p.fa}" aria-hidden="true"></i></div>
+      <div class="cb">
+        <div class="cl">${p.label}</div>
+        <div class="cs">${s}</div>
+      </div>
+      <i class="fa-solid fa-arrow-up-right-from-square car" aria-hidden="true"></i>`;
+    a.addEventListener("click",e=>nav(e,h,m));
+    cardsEl.appendChild(a);
+  });
+} else cardsEl.remove();
+
+/* Footer */
+if(CONFIG.poweredBy){
+  document.getElementById("footer").innerHTML=`
+    <a href="${CONFIG.poweredBy.url}" target="_blank" rel="noopener noreferrer">
+      <span>Powered by</span>
+      <span class="brand">${CONFIG.poweredBy.label}</span>
+    </a>`;
+}
+
+/* Scroll → overlay fade */
+const scroller = document.getElementById("scroller");
+const overlay  = document.getElementById("bg-overlay");
+scroller.addEventListener("scroll",()=>{
+  overlay.style.opacity = Math.min(scroller.scrollTop/280,1);
+},{passive:true});
+
+/* ── vCard generator ── */
+async function toB64(url){
+  const res=await fetch(url), blob=await res.blob();
+  return new Promise((ok,err)=>{
+    const r=new FileReader();
+    r.onloadend=()=>ok(r.result); r.onerror=err;
+    r.readAsDataURL(blob);
+  });
+}
+
+function buildVCard(photo64){
+  const rows=[
+    "BEGIN:VCARD","VERSION:3.0",
+    `FN:${CONFIG.name}`,`N:${CONFIG.name};;;;`
+  ];
+  (CONFIG.phones||[]).forEach(p=>rows.push(`TEL;TYPE=${p.label}:${p.number}`));
+
+  const ml=CONFIG.links.find(l=>isMail(l.type));
+  if(ml) rows.push(`EMAIL:${ml.url.replace(/^mailto:/i,"")}`);
+
+  sorted.filter(l=>!isMail(l.type)).forEach(l=>
+    rows.push(`URL;type=${plat(l.type).label}:${href(l)}`)
+  );
+
+  if(CONFIG.bio?.trim())
+    rows.push(`NOTE:${CONFIG.bio.replace(/[\r\n]+/g,"\\n")}`);
+
+  if(photo64){
+    const b64=photo64.split(",")[1];
+    const mime=photo64.match(/data:(.+);base64/)?.[1]||"image/jpeg";
+    const typ=mime.includes("png")?"PNG":"JPEG";
+    rows.push(`PHOTO;ENCODING=b;TYPE=${typ}:`);
+    for(let i=0;i<b64.length;i+=73) rows.push(` ${b64.slice(i,i+73)}`);
+  }
+  rows.push("END:VCARD");
+  return rows.join("\r\n");
+}
+
+async function saveVCard(){
+  saveBtn.disabled=true;
+  saveBtn.innerHTML=`<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i><span>Génération…</span>`;
+  try{
+    let photo64; try{photo64=await toB64(avatarUrl);}catch{}
+    const vcf=buildVCard(photo64);
+    const blob=new Blob([vcf],{type:"text/vcard;charset=utf-8"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=url; a.download=`${CONFIG.name.replace(/\s+/g,"_")}.vcf`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(url),1500);
+  }catch(e){console.error("vCard:",e);}
+  finally{
+    saveBtn.disabled=false;
+    saveBtn.innerHTML=`<i class="fa-solid fa-download" aria-hidden="true"></i><span>Enregistrer contact</span>`;
+  }
+}
+</script>
+</body>
+</html>
