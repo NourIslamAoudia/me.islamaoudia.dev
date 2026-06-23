@@ -29,9 +29,10 @@
       }
 
       :root {
-        --gold: #c9a664;
-        --gold-60: rgba(201, 166, 100, 0.6);
-        --gold-30: rgba(201, 166, 100, 0.3);
+        --accent: #38bdf8;
+        --accent-60: rgba(56, 189, 248, 0.6);
+        --accent-30: rgba(56, 189, 248, 0.3);
+        --accent-15: rgba(56, 189, 248, 0.15);
         --w100: rgba(255, 255, 255, 1);
         --w90: rgba(255, 255, 255, 0.9);
         --w70: rgba(255, 255, 255, 0.7);
@@ -59,8 +60,8 @@
       #app {
         position: fixed;
         inset: 0;
-        height: 100dvh;
-        width: 100vw;
+        min-height: 100dvh;
+        width: 100%;
         background: #000;
         overflow: hidden;
         animation: pgFade 0.5s ease forwards;
@@ -79,7 +80,7 @@
         margin: 0 auto;
         height: 100%;
         width: 100%;
-        max-width: 520px;
+        max-width: 560px;
       }
 
       /* ── Background ── */
@@ -91,7 +92,10 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        object-position: 50% 0%;
+
+        /* dézoom */
+        transform: scale(1) translateY(-110px);
+
         display: block;
       }
       #bg-gradient {
@@ -171,7 +175,7 @@
         width: 4px;
         height: 4px;
         border-radius: 50%;
-        background: var(--gold);
+        background: var(--accent);
         flex-shrink: 0;
       }
 
@@ -215,7 +219,7 @@
       .ic:focus-visible {
         color: var(--w100);
         transform: translateY(-2px) scale(1.09);
-        background: var(--w08);
+        background: var(--accent-15);
       }
       .ic:active {
         transform: scale(0.88);
@@ -262,16 +266,16 @@
         -webkit-backdrop-filter: blur(16px);
       }
       .btn-call:hover {
-        background: var(--w15);
-        border-color: var(--w30);
+        background: var(--accent-15);
+        border-color: var(--accent-30);
       }
       .btn-save {
         background: var(--w100);
         color: #000;
       }
       .btn-save:hover {
-        background: rgba(255, 255, 255, 0.88);
-        box-shadow: 0 4px 22px rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.92);
+        box-shadow: 0 4px 22px rgba(56, 189, 248, 0.16);
       }
       .btn-save:disabled {
         opacity: 0.6;
@@ -305,7 +309,7 @@
       }
       .ca:hover {
         background: var(--w08);
-        border-color: var(--gold-30);
+        border-color: var(--accent-30);
       }
       .ca:active {
         transform: scale(0.984);
@@ -325,8 +329,8 @@
           border-color 0.18s;
       }
       .ca:hover .ci {
-        background: var(--w15);
-        border-color: var(--gold-60);
+        background: var(--accent-15);
+        border-color: var(--accent-60);
       }
       .ci i {
         font-size: 1.05rem;
@@ -374,14 +378,85 @@
         transition: color 0.2s;
       }
       footer a:hover {
-        color: var(--gold);
+        color: var(--accent);
       }
       .brand {
         font-weight: 700;
-        color: rgba(201, 166, 100, 0.82);
+        color: rgba(56, 189, 248, 0.82);
       }
       footer a:hover .brand {
-        color: var(--gold);
+        color: var(--accent);
+      }
+
+      @media (max-width: 540px) {
+        #content {
+          padding: 0 16px 20px;
+        }
+
+        #spacer {
+          height: 48vh;
+        }
+
+        #icons {
+          gap: 6px;
+          margin-top: 18px;
+        }
+
+        .ic {
+          width: 46px;
+          height: 46px;
+          font-size: 1.2rem;
+        }
+
+        #buttons {
+          gap: 8px;
+        }
+
+        .btn {
+          width: min(100%, 240px);
+          justify-content: center;
+          padding: 12px 18px;
+        }
+
+        #cards {
+          gap: 8px;
+        }
+
+        .ca {
+          padding: 11px 13px;
+          gap: 11px;
+        }
+
+        .ci {
+          width: 40px;
+          height: 40px;
+        }
+      }
+
+      @media (max-width: 380px) {
+        #name {
+          letter-spacing: 0.16em;
+        }
+
+        #bio {
+          line-height: 1.62;
+        }
+
+        #spacer {
+          height: 44vh;
+        }
+
+        .btn {
+          width: 100%;
+        }
+
+        .cl {
+          font-size: 0.84rem;
+        }
+
+        .cs {
+          font-size: 0.69rem;
+        }
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -580,7 +655,8 @@
       document.title = CONFIG.pageTitle || CONFIG.name;
       document.getElementById("bg-img").src = avatarUrl;
       document.getElementById("name").textContent = CONFIG.name;
-      setTimeout(() => document.getElementById("sep").classList.add("on"), 160);
+      const sepEl = document.getElementById("sep");
+      if (sepEl) setTimeout(() => sepEl.classList.add("on"), 160);
 
       const bioEl = document.getElementById("bio");
       CONFIG.bio?.trim() ? (bioEl.textContent = CONFIG.bio) : bioEl.remove();
